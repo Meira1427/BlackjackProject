@@ -28,6 +28,12 @@ public class Card {
 		this.rank = rank;
 	}
 
+	
+	/*
+	 * Format produces cards like this:
+	 * [ ♡ 10 ♡    Ten of Hearts  ♡ 10 ♡ ]
+	 * [ ♧ K ♧    King of Clubs  ♧ K ♧ ]
+	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("");

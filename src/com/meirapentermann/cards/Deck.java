@@ -21,6 +21,9 @@ public class Deck {
 		this.values = values;
 	}
 	
+	/*
+	 * Loops through both enums to produce a new deck
+	 */
 	private List<Card> createDeck() {
 		List<Card> temp = new ArrayList<>();
 		Card c;
@@ -41,10 +44,18 @@ public class Deck {
 		return temp;
 	}
 	
+	/*
+	 * Shuffles deck
+	 */
 	public void shuffleDeck() {
 		Collections.shuffle(this.deck);
 	}
 	
+	/*
+	 * Verify that deck isn't empty
+	 * Then deal one card and remove it from deck
+	 * if deck is empty, return null
+	 */	
 	public Card dealCard() {
 		if (cardSLeft() > 0) {
 			Card c = deck.remove(0);
@@ -56,10 +67,16 @@ public class Deck {
 		}
 	}
 	
+	/*
+	 * returns # cards left in deck
+	 */
 	public int cardSLeft() {
 		return this.deck.size();
 	}
 
+	/*
+	 * Getters and Setters
+	 */
 	public int[] getValues() {
 		return values;
 	}
@@ -80,6 +97,9 @@ public class Deck {
 		this.numDealt = numDealt;
 	}
 
+	/*
+	 * Basic toString() method
+	 */
 	@Override
 	public String toString() {
 		return "Deck [" + deck + "]";

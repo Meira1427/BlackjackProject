@@ -9,6 +9,9 @@ public enum Suit {
 	public String displayText;
 	public char displayChar;
 	
+	/*
+	 * Constructor forces full set up
+	 */
 	private Suit(String s, char c) {
 		this.displayText = s;
 		this.displayChar = c;

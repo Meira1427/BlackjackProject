@@ -15,10 +15,19 @@ public enum Rank {
 	, QUEEN("Queen of ", "Q", 10)
 	, KING("King of ", "K", 10);
 	
+	/*
+	 * Default values of this enum are for blackjack values
+	 * However, the class Deck allows user to override these enum values with a new list of values
+	 * In that way a new instance of a deck can be initiated to play other card games
+	 */
+	
 	public String displayText;
 	public String displayShort;
 	public int value;
 	
+	/*
+	 * Constructor forces full set-up
+	 */
 	private Rank (String s, String c, int v) {
 		this.displayText = s;
 		this.displayShort = c;
