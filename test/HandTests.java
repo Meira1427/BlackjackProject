@@ -37,9 +37,10 @@ public class HandTests {
 	public void test_adding_cards_to_hand() {
 		h.addCard(c1);
 		h.addCard(c2);
-		System.out.println(h);
 		assertEquals(2, h.getHand().size());
-		
+		h.addCard(c3);
+		System.out.println(h);
+		assertEquals(3, h.getHand().size());
 	}
 
 }
