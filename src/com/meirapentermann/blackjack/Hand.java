@@ -32,13 +32,13 @@ public class Hand {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("");
-		sb.append("* * * * * * * * * * * * * *\n\n");
+		sb.append("* * * * * * * * * * * * * * * * * * * * * * *\n\n");
 		List<Card> cards = this.getHand();
 		for(Card card : cards) {
 			sb.append(card);
 			sb.append("\n");
 		}
-		sb.append("* * * * * * * * * * * * * *\n");
+		sb.append("* * * * * * * * * * * * * * * * * * * * * * *\n");
 		return sb.toString();
 	}
 	
