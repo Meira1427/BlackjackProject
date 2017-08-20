@@ -16,7 +16,7 @@ public class Deck {
 	
 	public Deck(int[] values) {
 		//default values of rank are for blackjack
-		//use this constructor if you need to pass in new values
+		//use this constructor if you need to pass in new values for different games
 		this();
 		this.values = values;
 	}

@@ -43,14 +43,10 @@ public class Card {
 		sb.append(rank.displayShort);
 		sb.append(" ");
 		sb.append(suit.displayChar);
-		sb.append(" ");
-		sb.append(" ");
-		sb.append(" ");
-		sb.append(" ");
+		sb.append("    ");
 		sb.append(rank.displayText);
 		sb.append(suit.displayText);
-		sb.append(" ");
-		sb.append(" ");
+		sb.append("  ");
 		sb.append(suit.displayChar);
 		sb.append(" ");
 		sb.append(rank.displayShort);

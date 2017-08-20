@@ -18,7 +18,7 @@ public enum Rank {
 	/*
 	 * Default values of this enum are for blackjack values
 	 * However, the class Deck allows user to override these enum values with a new list of values
-	 * In that way a new instance of a deck can be initiated to play other card games
+	 * In that way a new instance of a deck can be initiated to play a different card games
 	 */
 	
 	public String displayText;

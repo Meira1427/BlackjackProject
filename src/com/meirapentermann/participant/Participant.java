@@ -12,9 +12,16 @@ public abstract class Participant {
 	
 	public abstract void displayHand(boolean bool);
 	
+	/*
+	 * need a way to reach in and add a card
+	 */
 	public void updateHand(Card c) {
 		this.hand.addCard(c);
 	}
+	
+	/*
+	 * Getters & Setters
+	 */
 
 	public String getName() {
 		return name;
@@ -24,20 +31,21 @@ public abstract class Participant {
 		this.name = name;
 	}
 
-	public List<Card> getHand() {
-		return hand.getHand();
+	public List<Card> getHand() { // Note: returning this in List<Card> format, so we can choose
+		return hand.getHand();	  //   to loop through the List of Cards. More versatile
 	}
 
 	public void setHand(Hand hand) {
 		this.hand = hand;
 	}
 	
-	public int handValue() {
+	public int handValue() {			// for easier grab at Player & Dealer level
 		return this.hand.handValue();
 	}
 	
 	/*
 	 * possible 2nd hand as a split
+	 * functionality not added yet
 	 */
 
 	public List<Card> getSplit() {

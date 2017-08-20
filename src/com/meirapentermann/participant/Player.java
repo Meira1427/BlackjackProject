@@ -9,7 +9,7 @@ public class Player extends Participant {
 	
 	public Player(String name) {
 		Hand hand = new Hand();
-		this.setHand(hand);
+		this.setHand(hand); //initialize a hand
 		this.setName(name);
 	}
 
