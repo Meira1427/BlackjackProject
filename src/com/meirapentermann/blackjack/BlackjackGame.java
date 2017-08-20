@@ -12,8 +12,12 @@ public class BlackjackGame {
 	private boolean gameOver;
 	private boolean playerBust;
 	private boolean dealerBust;
-	private boolean playerDisplay;
+	private boolean split;
 	
+	/*
+	 * Constructor requires a keyboard to set u the UserInput class
+	 * Then everything is initialized.
+	 */
 	public BlackjackGame (Scanner keyboard) {
 		player = new Player("Player");
 		dealer = new Dealer();
@@ -23,13 +27,17 @@ public class BlackjackGame {
 		gameOver = false;
 		playerBust = false;
 		dealerBust = false;
-		playerDisplay = false;
+		split = false;
 	}
 	
+	/*
+	 * full game combines all of the game logic methods
+	 * watches for early game over
+	 */
 	public void fullGame() {
 		initialSetUp();
 		determineNextSteps();
-		if(!this.gameOver) {
+		if(!(player.handValue() == 21 || this.gameOver)) {
 			expandPlayerHand();
 		}
 		if(!this.gameOver) {
@@ -38,6 +46,10 @@ public class BlackjackGame {
 		calculateWin();
 	}
 	
+	/*
+	 * initial set-up deals 2 cards each, starting with player
+	 * then it displays hands, full hand for player, half hand for dealer
+	 */
 	public void initialSetUp() {
 		Card c1, c2;
 		for(int i = 0; i< 2; i++) {
@@ -46,14 +58,28 @@ public class BlackjackGame {
 			c2 = deck.dealCard();
 			dealer.updateHand(c2);
 		}
-		player.displayHand(playerDisplay);
-		dealer.displayHand(false); // false means not full hand is shown yet
+		player.displayHand(split); // starts out as false for split; display normally
+		if (dealer.handValue() == 21) {
+			dealer.displayHand(true); //dealer has natural BlackJack; print full hand
+		}
+		else {
+			dealer.displayHand(false); // false means not full hand is shown yet
+		}
 	}
-
+	
+	/*
+	 * to watch for instant win and possible split
+	 */
 	public void determineNextSteps() {
-		if (player.handValue() == 21) {
-			System.out.println("Player wins!");
-			this.gameOver = true;
+		if (dealer.handValue() == 21 && player.handValue() == 21) {
+			gameOver = true;
+		}
+		else if (dealer.handValue() == 21) {
+			gameOver = true;		  //if dealer has natural, but player does not; gameOver
+		}
+		else if (player.handValue() == 21) {
+			gameOver = true;		  //if dealer doesn't have natural BlackJack; gameOver
+			dealer.displayHand(true); //display dealer's hand because his loop will be skipped
 		}
 //		Rank r0 = player.getHand().get(0).getRank();
 //		Rank r1 = player.getHand().get(1).getRank();
@@ -69,13 +95,11 @@ public class BlackjackGame {
 		String answer = input.hitOrStay();
 		while (answer.equals("h")) {
 			player.updateHand(deck.dealCard());
-			player.displayHand(playerDisplay);
+			player.displayHand(split);
 			if(player.handValue()< 21)
 				answer = input.hitOrStay();
 			else if(player.handValue()==21) {
-				System.out.println("Player reaches 21. . .");
 				answer = "move on";
-				this.gameOver = true;
 			}
 			else {
 				answer = "bust";
@@ -97,13 +121,27 @@ public class BlackjackGame {
 		}
 	}
 	
+	/*
+	 * Starts with most unlikely case of a natural BlackJack for both dealer & player
+	 * Moves on in order of elimination of conditions of cards
+	 */
 	public void calculateWin() {
-		if(player.handValue() == 21) {
-			System.out.println("Player wins!");
-			System.out.println("Is this true even if we don't see dealer?");
+		if(player.handValue() == 21 && player.getHand().size()==2 
+		 & dealer.handValue() == 21 & dealer.getHand().size()==2) {
+			System.out.println("Natural BlackJack! Both Player & Dealer. It's a Tie!");
+		}
+		else if (player.handValue() == 21 && player.getHand().size()==2) {
+			System.out.println("Natural BlackJack! Player wins!");
+		}
+		else if (dealer.handValue() == 21 && dealer.getHand().size()==2) {
+			System.out.println("Natural BlackJack! Dealer wins!");
+		}
+		else if (player.handValue() == 21 && dealer.handValue() == 21) {
+			System.out.println("BlackJack! Both Player & Dealer. It's a Tie!");
 		}
 		else if(this.playerBust && this.dealerBust) {
 			System.out.println("Both Player and Dealer bust!");
+			//I think this is unreachable code. Dealer will not deal if player busts
 		}
 		else if (this.playerBust) {
 			System.out.println("Player busted. Dealer wins!");
@@ -156,4 +194,35 @@ public class BlackjackGame {
 		this.input = input;
 	}
 
+	public boolean isGameOver() {
+		return gameOver;
+	}
+
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
+
+	public boolean isPlayerBust() {
+		return playerBust;
+	}
+
+	public void setPlayerBust(boolean playerBust) {
+		this.playerBust = playerBust;
+	}
+
+	public boolean isDealerBust() {
+		return dealerBust;
+	}
+
+	public void setDealerBust(boolean dealerBust) {
+		this.dealerBust = dealerBust;
+	}
+
+	public boolean isSplit() {
+		return split;
+	}
+
+	public void setSplit(boolean split) {
+		this.split = split;
+	}
 }
