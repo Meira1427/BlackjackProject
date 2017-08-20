@@ -17,14 +17,18 @@ public class GameTests {
 	@After
 	public void tearDown() throws Exception {
 		game = null;
-		keyboard.close();
 	}
 
+//	@Test
+//	public void test_hands_dealt() {
+//		game.initialSetUp();
+//		assertEquals(2, game.getDealer().getHand().size());
+//		assertEquals(2, game.getPlayer().getHand().size());
+//	}
+	
 	@Test
-	public void test_hands_dealt() {
-		game.initialSetUp();
-		assertEquals(2, game.getDealer().getHand().size());
-		assertEquals(2, game.getPlayer().getHand().size());
+	public void test_full_game() {
+		game.fullGame();
 	}
 
 }

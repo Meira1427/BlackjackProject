@@ -1,10 +1,8 @@
 package com.meirapentermann.blackjack;
 
 import com.meirapentermann.participant.*;
-
-import java.util.Scanner;
-
 import com.meirapentermann.cards.*;
+import java.util.Scanner;
 
 public class BlackjackGame {
 	private Player player;
@@ -12,6 +10,8 @@ public class BlackjackGame {
 	private Deck deck;
 	private UserInput input;
 	private boolean gameOver;
+	private boolean playerBust;
+	private boolean dealerBust;
 	private boolean playerDisplay;
 	
 	public BlackjackGame (Scanner keyboard) {
@@ -21,6 +21,8 @@ public class BlackjackGame {
 		deck.shuffleDeck();
 		input = new UserInput(keyboard);
 		gameOver = false;
+		playerBust = false;
+		dealerBust = false;
 		playerDisplay = false;
 	}
 	
@@ -29,9 +31,11 @@ public class BlackjackGame {
 		determineNextSteps();
 		if(!this.gameOver) {
 			expandPlayerHand();
-			expandDealerHand();
-			calculateWin();
 		}
+		if(!this.gameOver) {
+			expandDealerHand();
+		}
+		calculateWin();
 	}
 	
 	public void initialSetUp() {
@@ -43,7 +47,7 @@ public class BlackjackGame {
 			dealer.updateHand(c2);
 		}
 		player.displayHand(playerDisplay);
-		dealer.displayHand(false);
+		dealer.displayHand(false); // false means not full hand is shown yet
 	}
 
 	public void determineNextSteps() {
@@ -63,11 +67,22 @@ public class BlackjackGame {
 	
 	public void expandPlayerHand() {
 		String answer = input.hitOrStay();
-		while (answer == "h") {
+		while (answer.equals("h")) {
 			player.updateHand(deck.dealCard());
 			player.displayHand(playerDisplay);
-			answer = input.hitOrStay();
-		}
+			if(player.handValue()< 21)
+				answer = input.hitOrStay();
+			else if(player.handValue()==21) {
+				System.out.println("Player reaches 21. . .");
+				answer = "move on";
+				this.gameOver = true;
+			}
+			else {
+				answer = "bust";
+				this.gameOver = true;
+				this.playerBust = true;
+			}
+		} 
 	}
 	
 	public void expandDealerHand() {
@@ -77,24 +92,23 @@ public class BlackjackGame {
 			total = dealer.handValue();
 		}
 		dealer.displayHand(true);
+		if(dealer.handValue() > 21) {
+			this.dealerBust = true;
+		}
 	}
 	
 	public void calculateWin() {
-		boolean bustPlayer = false;
-		boolean bustDealer = false;
-		if(player.handValue() > 21) {
-			bustPlayer = true;
+		if(player.handValue() == 21) {
+			System.out.println("Player wins!");
+			System.out.println("Is this true even if we don't see dealer?");
 		}
-		if(dealer.handValue() > 21) {
-			bustDealer = true;
-		}
-		if(bustPlayer && bustDealer) {
+		else if(this.playerBust && this.dealerBust) {
 			System.out.println("Both Player and Dealer bust!");
 		}
-		else if (bustPlayer) {
+		else if (this.playerBust) {
 			System.out.println("Player busted. Dealer wins!");
 		}
-		else if (bustDealer) {
+		else if (this.dealerBust) {
 			System.out.println("Dealer busted. Player wins!");
 		}
 		else if (player.handValue() > dealer.handValue()) {
@@ -105,8 +119,6 @@ public class BlackjackGame {
 		}
 
 	}
-	
-	
 	
 	/*
 	 * Getters & Setters
