@@ -17,13 +17,13 @@ public class GameTests {
 	@Before
 	public void setUp() throws Exception {
 		game = new BlackjackGame(keyboard);
-		cA1 = new Card(Suit.SPADES, Rank.ACE);
-		cA2 = new Card(Suit.HEARTS, Rank.ACE);
-		cK = new Card(Suit.HEARTS, Rank.KING);
-		cQ = new Card(Suit.DIAMONDS, Rank.QUEEN);
-		cJ = new Card(Suit.CLUBS, Rank.JACK);
-		c2 = new Card(Suit.CLUBS, Rank.TWO);
-		c10 = new Card(Suit.DIAMONDS, Rank.TEN);
+		cA1 = new Card(Suit.SPADES, Rank.ACE, 11);
+		cA2 = new Card(Suit.HEARTS, Rank.ACE, 11);
+		cK = new Card(Suit.HEARTS, Rank.KING, 10);
+		cQ = new Card(Suit.DIAMONDS, Rank.QUEEN, 10);
+		cJ = new Card(Suit.CLUBS, Rank.JACK, 10);
+		c2 = new Card(Suit.CLUBS, Rank.TWO, 2);
+		c10 = new Card(Suit.DIAMONDS, Rank.TEN, 10);
 	}
 
 	@After

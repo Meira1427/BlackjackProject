@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Deck {
-	private int[] values = new int[13]; //optionally change values of enums;
 	private List<Card> deck = new ArrayList<>();
 	private int numDealt;
 	
@@ -14,15 +13,19 @@ public class Deck {
 		this.deck = createDeck();
 	}
 	
-	public Deck(int[] values) {
-		//default values of rank are for blackjack
-		//use this constructor if you need to pass in new values for different games
-		this();
-		this.values = values;
+	/*
+	 * optional constructor for different values passed in.
+	 * must be an array of 13 integers in order of Ace, 2, 3 etc.
+	 */
+	public Deck (int[] values) {
+		this.numDealt = 0;
+		this.deck = createDeck(values);
 	}
+	
 	
 	/*
 	 * Loops through both enums to produce a new deck
+	 * chooses default Blackjack values
 	 */
 	private List<Card> createDeck() {
 		List<Card> temp = new ArrayList<>();
@@ -34,10 +37,35 @@ public class Deck {
 						Rank.FIVE, Rank.SIX, Rank.SEVEN, Rank.EIGHT,
 						Rank.NINE, Rank.TEN, Rank.JACK, Rank.QUEEN,
 						Rank.KING };
+		int[] values = {11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
 						
-		for(Rank rank : ranks) {
+		for(int i = 0; i < 13; i++) {
 			for(Suit suit : suits) {
-				c = new Card(suit, rank);
+				c = new Card(suit, ranks[i], values[i]);
+				temp.add(c);
+			}
+		}
+		return temp;
+	}
+	
+	/*
+	 * optional constructor for different values passed in.
+	 * must be an array of 13 integers in order of Ace, 2, 3 etc.
+	 */
+	private List<Card> createDeck(int[] values) {
+		List<Card> temp = new ArrayList<>();
+		Card c;
+		Suit[] suits = {Suit.HEARTS, Suit.SPADES, 
+						Suit.CLUBS, Suit.DIAMONDS  };
+
+		Rank[] ranks = {Rank.ACE, Rank.TWO, Rank.THREE, Rank.FOUR, 
+						Rank.FIVE, Rank.SIX, Rank.SEVEN, Rank.EIGHT,
+						Rank.NINE, Rank.TEN, Rank.JACK, Rank.QUEEN,
+						Rank.KING };
+						
+		for(int i = 0; i < 13; i++) {
+			for(Suit suit : suits) {
+				c = new Card(suit, ranks[i], values[i]);
 				temp.add(c);
 			}
 		}
@@ -77,13 +105,6 @@ public class Deck {
 	/*
 	 * Getters and Setters
 	 */
-	public int[] getValues() {
-		return values;
-	}
-
-	public void setValues(int[] values) {
-		this.values = values;
-	}
 
 	public List<Card> getDeck() {
 		return deck;

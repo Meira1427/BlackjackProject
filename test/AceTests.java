@@ -21,11 +21,11 @@ public class AceTests {
 	public void setUp() throws Exception {
 		d = new Deck();
 		d.shuffleDeck();
-		c1 = new Card(Suit.SPADES, Rank.ACE);
-		c2 = new Card(Suit.CLUBS, Rank.JACK);
-		c3 = new Card(Suit.CLUBS, Rank.TWO);
-		c4 = new Card(Suit.HEARTS, Rank.ACE);
-		c5 = new Card(Suit.DIAMONDS, Rank.EIGHT);
+		c1 = new Card(Suit.SPADES, Rank.ACE, 11);
+		c2 = new Card(Suit.CLUBS, Rank.JACK, 10);
+		c3 = new Card(Suit.CLUBS, Rank.TWO, 2);
+		c4 = new Card(Suit.HEARTS, Rank.ACE, 11);
+		c5 = new Card(Suit.DIAMONDS, Rank.EIGHT, 8);
 		h = new Hand();
 		h.addCard(c2);
 		h.addCard(c3);
@@ -73,20 +73,8 @@ public class AceTests {
 	
 	@Test
 	public void changing_Ace_to_One() {
-		/* Can't do it this way unless we change whole structure
-		 * It reaches in and changes value of all Aces
-		 */
-		System.out.println(h.handValue());
-		game.changeAceToOne(h.getHand());
-		System.out.println(h);
-		System.out.println(h.handValue());
-		System.out.println("Printing value: " + h.getHand().get(2).getRank().value);
-		System.out.println("Printing value: " + h.getHand().get(3).getRank().value);
-		Deck d2 = new Deck();
-		System.out.println("Generic card " + d2.getDeck().get(0).getRank().value);
-		System.out.println("Generic card " + d2.getDeck().get(1).getRank().value);
-		System.out.println("Generic card " + d2.getDeck().get(2).getRank().value);
-		System.out.println("Generic card " + d2.getDeck().get(3).getRank().value);
+		assertEquals(22, game.modifyHandValue(h));
+		assertEquals(42, h.handValue());
 	}
 
 

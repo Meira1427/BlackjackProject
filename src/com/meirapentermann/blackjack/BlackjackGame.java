@@ -112,6 +112,10 @@ public class BlackjackGame {
 		return count;
 	}
 	
+	/*
+	 * This may not be useful. If I reach in and change value of Rank,
+	 * it changes all Aces in deck
+	 */
 	public List<Integer> acesInHandLocation(List<Card> cards) {
 		if (acesInHandCount(cards)==0) {
 			return null;
@@ -127,14 +131,15 @@ public class BlackjackGame {
 		}
 	}
 	
-	public void changeAceToOne (List<Card> cards) {
-		if(acesInHandCount(cards) > 0) {
-			List<Integer> ints = acesInHandLocation(cards);
-			int index = ints.get(0);
-			System.out.println("Index is " + index);
-			System.out.println("Card is " + cards.get(index));
-			cards.get(index).getRank().setValue(1);
+	public int modifyHandValue (Hand h) {
+		int value = h.handValue();
+		if(acesInHandCount(h.getHand()) > 0) {
+			value -= 10;
 		}
+		if(value > 21 && acesInHandCount(h.getHand()) > 1) {
+			value -= 10;
+		}
+		return value;
 	}
 	
 	public void expandPlayerHand() {

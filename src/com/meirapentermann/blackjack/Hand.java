@@ -39,7 +39,7 @@ public class Hand {
 		List<Card> cards = this.getHand();
 		int value = 0;
 		for(Card card : cards) {
-			value += card.getRank().value;
+			value += card.getValue();
 		}
 		return value;
 	}
