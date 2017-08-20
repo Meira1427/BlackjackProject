@@ -26,7 +26,7 @@ public class Dealer extends Participant {
 		else {
 			System.out.print("[ " + '\u2660' + "   " + '\u2663' + "   ");
 			System.out.print('\u2665' + "   " + '\u2666' + "   " + '\u2660' + "   ");
-			System.out.println('\u2663' + "   " + '\u2665' + "   " + '\u2666' + " ]");
+			System.out.println('\u2663' + "   " + '\u2665' + "   " + '\u2666' + " ]\n");
 			for(int i = 1; i<hand.size(); i++){
 				System.out.println(hand.get(i));
 			}
