@@ -64,7 +64,7 @@ public class HandTests {
 		h.addCard(c1);
 		h.addCard(c2);
 		player1.setHand(h);
-		player1.displayHand(true);
+		player1.displayHand(false);
 		assertEquals(2, player1.getHand().size());
 	}
 
