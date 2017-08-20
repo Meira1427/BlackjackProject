@@ -33,11 +33,55 @@ public class BlackjackGame {
 		dealer.displayHand(false);
 	}
 	
-	public void expandPlayerHand(Participant p) {
+	public void expandPlayerHand() {
 		String answer = input.hitOrStand();
 		while (answer == "h") {
-			
+			player.updateHand(deck.dealCard());
+			player.displayHand(true);
+			answer = input.hitOrStand();
 		}
+	}
+	
+	public void explandDealerHand() {
+		int total = dealer.handValue();
+		while(total < 17) {
+			dealer.updateHand(deck.dealCard());
+			total = dealer.handValue();
+		}
+		dealer.displayHand(true);
+	}
+	
+	public Participant calculateWin() {
+		boolean bustPlayer = false;
+		boolean bustDealer = false;
+		if(player.handValue() > 21) {
+			bustPlayer = true;
+		}
+		if(dealer.handValue() > 21) {
+			bustDealer = true;
+		}
+		if(bustPlayer && bustDealer) {
+			System.out.println("Both Player and Dealer bust!");
+			return dealer;
+		}
+		else if (bustPlayer) {
+			System.out.println("Player busted. Dealer wins!");
+			return dealer;
+		}
+		else if (bustDealer) {
+			System.out.println("Dealer busted. Player wins!");
+			return player;
+		}
+		else if (player.handValue() > dealer.handValue()) {
+			System.out.println("Player wins!");
+			return player;
+		}
+		else {
+			System.out.println("Dealer wins :(");
+			return dealer;
+		}
+		
+		
 	}
 	
 	
