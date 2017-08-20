@@ -45,7 +45,7 @@ public class BlackjackGame {
 			System.out.println();
 			initialSetUp();
 			determineNextSteps();
-			if(!(player.handValue() == 21 || this.gameOver)) {
+			if(!this.gameOver) {
 				expandPlayerHand();
 			}
 			if(!this.gameOver) {
