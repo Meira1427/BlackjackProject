@@ -2,6 +2,9 @@ package com.meirapentermann.blackjack;
 
 import com.meirapentermann.participant.*;
 import com.meirapentermann.cards.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class BlackjackGame {
@@ -13,6 +16,7 @@ public class BlackjackGame {
 	private boolean playerBust;
 	private boolean dealerBust;
 	private boolean split;
+	String playAgain;
 	
 	/*
 	 * Constructor requires a keyboard to set u the UserInput class
@@ -28,22 +32,29 @@ public class BlackjackGame {
 		playerBust = false;
 		dealerBust = false;
 		split = false;
+		playAgain = "y";
 	}
 	
 	/*
 	 * full game combines all of the game logic methods
 	 * watches for early game over
+	 * loops for player to playAgain
 	 */
 	public void fullGame() {
-		initialSetUp();
-		determineNextSteps();
-		if(!(player.handValue() == 21 || this.gameOver)) {
-			expandPlayerHand();
+		while(playAgain.equals("y")) {
+			initialSetUp();
+			determineNextSteps();
+			if(!(player.handValue() == 21 || this.gameOver)) {
+				expandPlayerHand();
+			}
+			if(!this.gameOver) {
+				expandDealerHand();
+			}
+			calculateWin();
+			System.out.println();
+			tearDown();
+			this.playAgain = input.yesOrNo();
 		}
-		if(!this.gameOver) {
-			expandDealerHand();
-		}
-		calculateWin();
 	}
 	
 	/*
@@ -89,6 +100,33 @@ public class BlackjackGame {
 //			 * 
 //			 */
 //		}
+	}
+	
+	public int acesInHandCount(Hand h) {
+		List<Card> cards = h.getHand();
+		int count = 0;
+		for(Card card: cards) {
+			if (card.getRank() == Rank.ACE) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	public List<Integer> acesInHandLocation(Hand h) {
+		if (acesInHandCount(h)==0) {
+			return null;
+		}
+		else {
+			List<Card> cards = h.getHand();
+			List<Integer> ints = new ArrayList<>();
+			for(int i = 0; i<cards.size(); i++) {
+				if (cards.get(i).getRank()==Rank.ACE) {
+					ints.add(i);
+				}
+			}
+			return ints;
+		}
 	}
 	
 	public void expandPlayerHand() {
@@ -155,8 +193,21 @@ public class BlackjackGame {
 		else {
 			System.out.println("Dealer wins.");
 		}
-
 	}
+		
+	public void tearDown()	{
+		this.deck = new Deck();
+		this.deck.shuffleDeck();
+		Hand hand1 = new Hand();
+		Hand hand2 = new Hand();
+		this.getPlayer().setHand(hand1);
+		this.getDealer().setHand(hand2);
+		gameOver = false;
+		playerBust = false;
+		dealerBust = false;
+		split = false;
+	}
+
 	
 	/*
 	 * Getters & Setters

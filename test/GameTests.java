@@ -45,10 +45,10 @@ public class GameTests {
 		assertEquals(2, game.getPlayer().getHand().size());
 	}
 	
-	@Test
-	public void test_full_game_generic_watch_output() {
-		game.fullGame();
-	}
+//	@Test
+//	public void test_full_game_generic_watch_output() {
+//		game.fullGame();
+//	}
 	
 	@Test
 	public void test_player_21_first_draw_dealer_too() {
