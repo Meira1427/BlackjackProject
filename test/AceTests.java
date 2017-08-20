@@ -27,9 +27,9 @@ public class AceTests {
 		c4 = new Card(Suit.HEARTS, Rank.ACE);
 		c5 = new Card(Suit.DIAMONDS, Rank.EIGHT);
 		h = new Hand();
-		h.addCard(c1);
 		h.addCard(c2);
 		h.addCard(c3);
+		h.addCard(c1);
 		h.addCard(c4);
 		h.addCard(c5);
 		h2 = new Hand();
@@ -69,6 +69,24 @@ public class AceTests {
 	@Test
 	public void test_Aces_Integer_ArrayList() {
 		assertEquals(2, game.acesInHandLocation(h.getHand()).size());
+	}
+	
+	@Test
+	public void changing_Ace_to_One() {
+		/* Can't do it this way unless we change whole structure
+		 * It reaches in and changes value of all Aces
+		 */
+		System.out.println(h.handValue());
+		game.changeAceToOne(h.getHand());
+		System.out.println(h);
+		System.out.println(h.handValue());
+		System.out.println("Printing value: " + h.getHand().get(2).getRank().value);
+		System.out.println("Printing value: " + h.getHand().get(3).getRank().value);
+		Deck d2 = new Deck();
+		System.out.println("Generic card " + d2.getDeck().get(0).getRank().value);
+		System.out.println("Generic card " + d2.getDeck().get(1).getRank().value);
+		System.out.println("Generic card " + d2.getDeck().get(2).getRank().value);
+		System.out.println("Generic card " + d2.getDeck().get(3).getRank().value);
 	}
 
 

@@ -127,12 +127,22 @@ public class BlackjackGame {
 		}
 	}
 	
+	public void changeAceToOne (List<Card> cards) {
+		if(acesInHandCount(cards) > 0) {
+			List<Integer> ints = acesInHandLocation(cards);
+			int index = ints.get(0);
+			System.out.println("Index is " + index);
+			System.out.println("Card is " + cards.get(index));
+			cards.get(index).getRank().setValue(1);
+		}
+	}
+	
 	public void expandPlayerHand() {
 		String answer = input.hitOrStay();
 		while (answer.equals("h")) {
 			player.updateHand(deck.dealCard());
 			player.displayHand(split);
-			if(player.handValue()< 21)
+			if(player.handValue() < 21)
 				answer = input.hitOrStay();
 			else if(player.handValue()==21) {
 				answer = "move on";
