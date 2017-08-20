@@ -11,7 +11,8 @@ public class BlackjackGame {
 	private Dealer dealer;
 	private Deck deck;
 	private UserInput input;
-	private Scanner keyboard;
+	private boolean gameOver;
+	private boolean playerDisplay;
 	
 	public BlackjackGame (Scanner keyboard) {
 		player = new Player("Player");
@@ -19,6 +20,18 @@ public class BlackjackGame {
 		deck = new Deck();
 		deck.shuffleDeck();
 		input = new UserInput(keyboard);
+		gameOver = false;
+		playerDisplay = false;
+	}
+	
+	public void fullGame() {
+		initialSetUp();
+		determineNextSteps();
+		if(!this.gameOver) {
+			expandPlayerHand();
+			expandDealerHand();
+			calculateWin();
+		}
 	}
 	
 	public void initialSetUp() {
@@ -29,20 +42,35 @@ public class BlackjackGame {
 			c2 = deck.dealCard();
 			dealer.updateHand(c2);
 		}
-		player.displayHand(true);
+		player.displayHand(playerDisplay);
 		dealer.displayHand(false);
+	}
+
+	public void determineNextSteps() {
+		if (player.handValue() == 21) {
+			System.out.println("Player wins!");
+			this.gameOver = true;
+		}
+//		Rank r0 = player.getHand().get(0).getRank();
+//		Rank r1 = player.getHand().get(1).getRank();
+//		if(
+//			/*
+//			 * add split hand here
+//			 * 
+//			 */
+//		}
 	}
 	
 	public void expandPlayerHand() {
-		String answer = input.hitOrStand();
+		String answer = input.hitOrStay();
 		while (answer == "h") {
 			player.updateHand(deck.dealCard());
-			player.displayHand(true);
-			answer = input.hitOrStand();
+			player.displayHand(playerDisplay);
+			answer = input.hitOrStay();
 		}
 	}
 	
-	public void explandDealerHand() {
+	public void expandDealerHand() {
 		int total = dealer.handValue();
 		while(total < 17) {
 			dealer.updateHand(deck.dealCard());
@@ -51,7 +79,7 @@ public class BlackjackGame {
 		dealer.displayHand(true);
 	}
 	
-	public Participant calculateWin() {
+	public void calculateWin() {
 		boolean bustPlayer = false;
 		boolean bustDealer = false;
 		if(player.handValue() > 21) {
@@ -62,26 +90,20 @@ public class BlackjackGame {
 		}
 		if(bustPlayer && bustDealer) {
 			System.out.println("Both Player and Dealer bust!");
-			return dealer;
 		}
 		else if (bustPlayer) {
 			System.out.println("Player busted. Dealer wins!");
-			return dealer;
 		}
 		else if (bustDealer) {
 			System.out.println("Dealer busted. Player wins!");
-			return player;
 		}
 		else if (player.handValue() > dealer.handValue()) {
 			System.out.println("Player wins!");
-			return player;
 		}
 		else {
-			System.out.println("Dealer wins :(");
-			return dealer;
+			System.out.println("Dealer wins.");
 		}
-		
-		
+
 	}
 	
 	

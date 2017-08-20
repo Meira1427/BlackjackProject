@@ -35,10 +35,10 @@ public class UserInput {
 	/*
 	 * Returns an "h" or a "s"
 	 */
-	public String hitOrStand() {
+	public String hitOrStay() {
 		String answer = "w";
 		while(! (answer.equals("h") || answer.equals("s"))) {
-			answer = returnUserString("Would you like to (h)it or (s)tand? ");
+			answer = returnUserString("Would you like to (h)it or (s)tay? ");
 			answer = answer.toLowerCase();
 		}
 		return answer;
