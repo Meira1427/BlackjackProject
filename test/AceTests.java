@@ -53,22 +53,22 @@ public class AceTests {
 	
 	@Test
 	public void test_Aces_true() {
-		assertEquals(2, game.acesInHandCount(h));
+		assertEquals(2, game.acesInHandCount(h.getHand()));
 	}
 	
 	@Test
 	public void test_Aces_false() {
-		assertEquals(0, game.acesInHandCount(h2));
+		assertEquals(0, game.acesInHandCount(h2.getHand()));
 	}
 	
 	@Test
 	public void test_Aces_null() {
-		assertNull(game.acesInHandLocation(h2));
+		assertNull(game.acesInHandLocation(h2.getHand()));
 	}
 	
 	@Test
 	public void test_Aces_Integer_ArrayList() {
-		assertEquals(2, game.acesInHandLocation(h).size());
+		assertEquals(2, game.acesInHandLocation(h.getHand()).size());
 	}
 
 

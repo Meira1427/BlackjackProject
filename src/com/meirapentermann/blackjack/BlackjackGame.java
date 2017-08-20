@@ -94,7 +94,7 @@ public class BlackjackGame {
 		}
 //		Rank r0 = player.getHand().get(0).getRank();
 //		Rank r1 = player.getHand().get(1).getRank();
-//		if(
+//		if(r0 ==
 //			/*
 //			 * add split hand here
 //			 * 
@@ -102,8 +102,7 @@ public class BlackjackGame {
 //		}
 	}
 	
-	public int acesInHandCount(Hand h) {
-		List<Card> cards = h.getHand();
+	public int acesInHandCount(List<Card> cards) {
 		int count = 0;
 		for(Card card: cards) {
 			if (card.getRank() == Rank.ACE) {
@@ -113,12 +112,11 @@ public class BlackjackGame {
 		return count;
 	}
 	
-	public List<Integer> acesInHandLocation(Hand h) {
-		if (acesInHandCount(h)==0) {
+	public List<Integer> acesInHandLocation(List<Card> cards) {
+		if (acesInHandCount(cards)==0) {
 			return null;
 		}
 		else {
-			List<Card> cards = h.getHand();
 			List<Integer> ints = new ArrayList<>();
 			for(int i = 0; i<cards.size(); i++) {
 				if (cards.get(i).getRank()==Rank.ACE) {
@@ -138,6 +136,9 @@ public class BlackjackGame {
 				answer = input.hitOrStay();
 			else if(player.handValue()==21) {
 				answer = "move on";
+			}
+			else if(acesInHandCount(player.getHand()) > 0) {
+				
 			}
 			else {
 				answer = "bust";
