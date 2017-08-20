@@ -42,6 +42,7 @@ public class BlackjackGame {
 	 */
 	public void fullGame() {
 		while(playAgain.equals("y")) {
+			System.out.println();
 			initialSetUp();
 			determineNextSteps();
 			if(!(player.handValue() == 21 || this.gameOver)) {
@@ -49,6 +50,7 @@ public class BlackjackGame {
 			}
 			if(!this.gameOver) {
 				expandDealerHand();
+				dealer.displayHand(true);
 			}
 			calculateWin();
 			System.out.println();
@@ -66,11 +68,13 @@ public class BlackjackGame {
 		for(int i = 0; i< 2; i++) {
 			c1 = deck.dealCard();
 			player.updateHand(c1);
+			//System.out.println("1. deck has " + deck.cardSLeft() + " cards left");
 			c2 = deck.dealCard();
 			dealer.updateHand(c2);
+			//System.out.println("2. deck has " + deck.cardSLeft() + " cards left");
 		}
 		player.displayHand(split); // starts out as false for split; display normally
-		if (dealer.handValue() == 21) {
+		if (dealer.handValue() == 21 || player.handValue() == 21) {
 			dealer.displayHand(true); //dealer has natural BlackJack; print full hand
 		}
 		else {
@@ -82,15 +86,8 @@ public class BlackjackGame {
 	 * to watch for instant win and possible split
 	 */
 	public void determineNextSteps() {
-		if (dealer.handValue() == 21 && player.handValue() == 21) {
+		if (dealer.handValue() == 21 || player.handValue() == 21) {
 			gameOver = true;
-		}
-		else if (dealer.handValue() == 21) {
-			gameOver = true;		  //if dealer has natural, but player does not; gameOver
-		}
-		else if (player.handValue() == 21) {
-			gameOver = true;		  //if dealer doesn't have natural BlackJack; gameOver
-			dealer.displayHand(true); //display dealer's hand because his loop will be skipped
 		}
 //		Rank r0 = player.getHand().get(0).getRank();
 //		Rank r1 = player.getHand().get(1).getRank();
@@ -131,17 +128,6 @@ public class BlackjackGame {
 		}
 	}
 	
-	public int modifyHandValue (Hand h) {
-		int value = h.handValue();
-		if(acesInHandCount(h.getHand()) > 0) {
-			value -= 10;
-		}
-		if(value > 21 && acesInHandCount(h.getHand()) > 1) {
-			value -= 10;
-		}
-		return value;
-	}
-	
 	public void expandPlayerHand() {
 		String answer = input.hitOrStay();
 		while (answer.equals("h")) {
@@ -153,7 +139,22 @@ public class BlackjackGame {
 				answer = "move on";
 			}
 			else if(acesInHandCount(player.getHand()) > 0) {
-				
+				List<Integer> list = acesInHandLocation(player.getHand());
+				int count = list.size();
+				while(( player.handValue() > 21) && count > 0 ) {
+					player.getHand().get(list.get(count-1)).setValue(1);
+					count--;
+				}
+				System.out.println("Hand with Aces Adjusted");
+				player.displayHand(split);
+				if(player.handValue()<21) {
+					answer = input.hitOrStay();
+				}
+				else {
+					answer = "bust";
+					this.gameOver = true;
+					this.playerBust = true;
+				}
 			}
 			else {
 				answer = "bust";
@@ -169,7 +170,17 @@ public class BlackjackGame {
 			dealer.updateHand(deck.dealCard());
 			total = dealer.handValue();
 		}
-		dealer.displayHand(true);
+		if( (dealer.handValue()> 21) && (acesInHandCount(dealer.getHand()) > 0)) {
+			List<Integer> list = acesInHandLocation(dealer.getHand());
+			int count = list.size();
+			while(( dealer.handValue() > 21) && count > 0 ) {
+				dealer.getHand().get(list.get(count-1)).setValue(1);
+				count--;
+			}
+		}
+		if(dealer.handValue() < 17) {
+			expandDealerHand();
+		}
 		if(dealer.handValue() > 21) {
 			this.dealerBust = true;
 		}
@@ -202,6 +213,9 @@ public class BlackjackGame {
 		}
 		else if (this.dealerBust) {
 			System.out.println("Dealer busted. Player wins!");
+		}
+		else if (player.handValue() == dealer.handValue()) {
+			System.out.println("It's a Tie!");
 		}
 		else if (player.handValue() > dealer.handValue()) {
 			System.out.println("Player wins!");

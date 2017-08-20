@@ -5,8 +5,8 @@ public class Card {
 	private Rank rank;
 	private int value;
 	
-	public Card() {
-	}
+//	public Card() {
+//	}
 	
 	public Card(Suit suit, Rank rank, int value) {
 		this.suit = suit;

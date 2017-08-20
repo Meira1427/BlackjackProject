@@ -73,7 +73,6 @@ public class AceTests {
 	
 	@Test
 	public void changing_Ace_to_One() {
-		assertEquals(22, game.modifyHandValue(h));
 		assertEquals(42, h.handValue());
 	}
 
