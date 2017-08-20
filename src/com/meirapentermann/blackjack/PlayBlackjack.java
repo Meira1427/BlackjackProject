@@ -2,10 +2,9 @@ package com.meirapentermann.blackjack;
 
 import java.util.Scanner;
 
-import com.meirapentermann.cards.Card;
-import com.meirapentermann.cards.Deck;
-import com.meirapentermann.cards.Rank;
-import com.meirapentermann.cards.Suit;
+import com.meirapentermann.cards.*;
+import com.meirapentermann.participant.*;
+
 
 public class PlayBlackjack {
 
@@ -20,13 +19,9 @@ public class PlayBlackjack {
 		Deck d = new Deck();
 		d.shuffleDeck();
 		
-		for(int i = 0; i<52; i++) {
-			System.out.println(d.dealCard());
-		}
-		
-		System.out.println(d.cardSLeft());
-		System.out.println(d.getNumDealt());
-		String temp = input.hitOrStand();
+		System.out.print("[ " + '\u2660' + "   " + '\u2663' + "   ");
+		System.out.print('\u2665' + "   " + '\u2666' + "   " + '\u2660' + "   ");
+		System.out.println('\u2663' + "   " + '\u2665' + " ]");
 		
 		keyboard.close();
 

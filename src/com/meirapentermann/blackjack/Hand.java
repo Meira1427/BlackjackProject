@@ -28,6 +28,23 @@ public class Hand {
 	}
 	
 	/*
+	 * return handSize
+	 */
+	
+	public int handSize() {
+		return getHand().size();
+	}
+	
+	public int handValue() {
+		List<Card> cards = this.getHand();
+		int value = 0;
+		for(Card card : cards) {
+			value += card.getRank().value;
+		}
+		return value;
+	}
+	
+	/*
 	 * Getters & Setters
 	 */
 	public List<Card> getHand() {
@@ -39,19 +56,17 @@ public class Hand {
 	}
 
 	/*
-	 * Displaying hand separated by stars
+	 * Displaying hand 
 	 * new line for every card
 	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("");
-		sb.append("* * * * * * * * * * * * * * * * * *\n\n");
 		List<Card> cards = this.getHand();
 		for(Card card : cards) {
 			sb.append(card);
 			sb.append("\n");
 		}
-		sb.append("* * * * * * * * * * * * * * * * * *\n");
 		return sb.toString();
 	}
 	
