@@ -97,22 +97,22 @@ public class BlackjackGame {
 		if (dealer.handValue() == 21 || player.handValue() == 21) {
 			gameOver = true;
 		}
-		Rank r0 = player.getHand().get(0).getRank();
-		Rank r1 = player.getHand().get(1).getRank();
-		String toSplit = "";
-		if(   (r0 == Rank.KING || r0 == Rank.QUEEN || r0 == Rank.JACK ) 
-		   && (r1 == Rank.KING || r1 == Rank.QUEEN || r1 == Rank.JACK)){
-			toSplit = input.yesOrNo("Would you like to split? (y/n) ");
-		}
-		else if(r0 == Rank.ACE && r1 == Rank.ACE) {
-			toSplit = input.yesOrNo("Would you like to split? (y/n) ");
-		}
-		if (toSplit.equals("y")) {
-			this.split = true;
-			player.getSplit().add(player.getHand().remove(0));
-			getPlayer().displayHand(isSplit());
-		}
-				
+		if(!(dealer.handValue()==21)) {
+			Rank r0 = player.getHand().get(0).getRank();
+			Rank r1 = player.getHand().get(1).getRank();
+			String toSplit = "";
+			if(   (r0 == Rank.KING || r0 == Rank.QUEEN || r0 == Rank.JACK || r0 == Rank.TEN) 
+			   && (r1 == Rank.KING || r1 == Rank.QUEEN || r1 == Rank.JACK || r1 == Rank.TEN)){
+				toSplit = input.yesOrNo("Would you like to split? (y/n) ");
+			}
+			else if(r0 == Rank.ACE && r1 == Rank.ACE) {
+				toSplit = input.yesOrNo("Would you like to split? (y/n) ");
+			}
+			if (toSplit.equals("y")) {
+				this.split = true;
+				player.getSplit().add(player.getHand().remove(0));
+			}
+		}		
 	}
 	
 	/*
@@ -159,9 +159,10 @@ public class BlackjackGame {
 			if (isSplit() && splitAnswer.equals("h")) {
 				player.updateHandSplit(deck.dealCard());//new card for split hand
 			}
-			player.displayHand(isSplit()); //show updated hand
-			if(player.handValue() < 21 || (isSplit() && player.splitHandValue()< 21)) { // 2nd half only fires if split
-				if(isSplit() && player.handValue()<21) { //need to clarify which hand to hit if both might need it
+			player.displayHand(isSplit()); //show updated hand - if isSplit use split format printing
+			//using less than or equal to 21 because sometimes one of the hands gets a blackjack, but the other still needs attention
+			if(player.handValue() < 21 || (isSplit() && player.splitHandValue() < 21)) { // 2nd half only fires if split
+				if(isSplit()) { //need to clarify which hand to hit if both might need it
 					System.out.print("For 1st Hand: ");
 					answer = input.hitOrStay();
 					if(player.splitHandValue() < 21) {
@@ -182,26 +183,25 @@ public class BlackjackGame {
 			if(answer.equals("s") && splitAnswer.equals("s")) {
 				break;
 			}	
-			if( (player.handValue() > 21 && acesInHandCount(player.getHand()) > 0)
-				|| (isSplit() && player.splitHandValue() > 21 && acesInHandCount(player.getSplit()) > 0)) {
-				if (player.handValue() > 21 && acesInHandCount(player.getHand()) > 0) {
+			if( (player.handValue() > 21 && acesInHandCount(player.getHand()) > 0) //try to fix Ace situation
+				|| (isSplit() && player.splitHandValue() > 21 && acesInHandCount(player.getSplit()) > 0)) { //if Aces need to be switched
+				if (player.handValue() > 21 && acesInHandCount(player.getHand()) > 0) { //main hand branch
 					dealWithAcesMainHand();
 				}
 				if (isSplit() && player.splitHandValue() > 21 && acesInHandCount(player.getSplit()) > 0) {
 					dealWithAcesSplitHand();
 				}
 			}
-			if(player.handValue() > 21 || (isSplit() && player.splitHandValue() > 21)) {
-				if(!isSplit() && player.handValue() > 21) {
+			if(player.handValue() > 21 || (isSplit() && player.splitHandValue() > 21)) { //if still over 21
+				if(player.handValue() > 21) { // over 21 main hand
 					answer = "bust";
 					this.gameOver = true;
 					this.playerBust = true;
 				}
-				if(isSplit() && player.splitHandValue() > 21) {
+				if(isSplit() && player.splitHandValue() > 21) { // over 21 split hand
 					splitAnswer = "bust";
 					this.splitBust = true;
 				}
-				break;
 			}
 		} //end while loop 
 	}
@@ -259,6 +259,7 @@ public class BlackjackGame {
 			System.out.println("Hand with Aces Adjusted");
 			player.displayHand(split);
 			if(player.splitHandValue()<21) {
+				System.out.println("For 2nd Hand: ");
 				splitAnswer = input.hitOrStay();
 			}
 			else {
@@ -312,6 +313,9 @@ public class BlackjackGame {
 	 * even if similar to other method. Will save from asking isSplit()? every lien
 	 */
 	public void calculateWinSplit() {
+		if ( (playerBust && !splitBust) || (splitBust && !playerBust) ) {
+			System.out.println("Player bust one hand.");
+		}
 		if(((player.handValue() == 21 && player.getHand().size()==2) 
 				|| (player.splitHandValue() == 21 && player.getSplit().size()==2))
 				&& (dealer.handValue() == 21 & dealer.getHand().size()==2) ) {
@@ -328,13 +332,29 @@ public class BlackjackGame {
 			System.out.println("BlackJack! Both Player & Dealer. It's a Tie!");
 		}
 		else if (this.playerBust && this.splitBust) {
-			System.out.println("Player busted. Dealer wins!");
+			System.out.println("Player busted both hands. Dealer wins!");
 		}
 		else if (this.dealerBust) {
-			System.out.println("Dealer busted. Player wins!");
+			if(!playerBust && !splitBust) {
+				System.out.println("Dealer busted. Player wins two hands!");
+			}
+			else if(playerBust || splitBust) {
+				System.out.println("Dealer busted. Player wins one hand!");
+			}
+			else {
+				System.out.println("Everyone busted.");
+			}
 		}
-		else if ((player.handValue() > dealer.handValue()) || (player.splitHandValue() > dealer.handValue())) {
-			System.out.println("Player wins!");
+		else if ( ( (player.handValue() > dealer.handValue()) && !playerBust)
+				|| ((player.splitHandValue() > dealer.handValue()) && !splitBust))  {
+			
+			if ((player.handValue() > dealer.handValue()) && (player.splitHandValue() > dealer.handValue()) 
+					&& !playerBust && !splitBust) {
+				System.out.println("Player wins two hands!");
+			}
+			else {
+				System.out.println("Player wins one hand!");
+			}
 		}
 		else if ((player.handValue() == dealer.handValue()) || (player.splitHandValue() == dealer.handValue())) {
 			System.out.println("It's a Tie!");
@@ -355,6 +375,8 @@ public class BlackjackGame {
 		playerBust = false;
 		dealerBust = false;
 		split = false;
+		answer = "h";	
+		splitAnswer = "x";
 	}
 	
 	public void printSuitBar() {
