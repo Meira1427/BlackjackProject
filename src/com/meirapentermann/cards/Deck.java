@@ -49,7 +49,7 @@ public class Deck {
 	}
 	
 	/*
-	 * optional constructor for different values passed in.
+	 * optional createDeck for different values passed in.
 	 * must be an array of 13 integers in order of Ace, 2, 3 etc.
 	 */
 	private List<Card> createDeck(int[] values) {
