@@ -48,8 +48,7 @@ public abstract class Participant {
 	}
 	
 	/*
-	 * possible 2nd hand as a split
-	 * functionality not added yet
+	 * 2nd hand as a split
 	 */
 
 	public List<Card> getSplit() {

@@ -160,11 +160,12 @@ public class BlackjackGame {
 				player.updateHandSplit(deck.dealCard());//new card for split hand
 			}
 			player.displayHand(isSplit()); //show updated hand - if isSplit use split format printing
-			//using less than or equal to 21 because sometimes one of the hands gets a blackjack, but the other still needs attention
 			if(player.handValue() < 21 || (isSplit() && player.splitHandValue() < 21)) { // 2nd half only fires if split
 				if(isSplit()) { //need to clarify which hand to hit if both might need it
-					System.out.print("For 1st Hand: ");
-					answer = input.hitOrStay();
+					if(player.handValue() < 21 ) {
+						System.out.print("For 1st Hand: ");
+						answer = input.hitOrStay();
+					}
 					if(player.splitHandValue() < 21) {
 						System.out.print("For 2nd Hand: ");
 						splitAnswer = input.hitOrStay();
@@ -221,7 +222,7 @@ public class BlackjackGame {
 			}
 		}
 		if(dealer.handValue() < 17) {
-			expandDealerHand();
+			expandDealerHand();       //recursive call back to itself, until dealer hand over 17
 		}
 		if(dealer.handValue() > 21) {
 			this.dealerBust = true;
@@ -259,7 +260,7 @@ public class BlackjackGame {
 			System.out.println("Hand with Aces Adjusted");
 			player.displayHand(split);
 			if(player.splitHandValue()<21) {
-				System.out.println("For 2nd Hand: ");
+				System.out.print("For 2nd Hand: ");
 				splitAnswer = input.hitOrStay();
 			}
 			else {
