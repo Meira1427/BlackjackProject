@@ -7,12 +7,17 @@ This project is a command-line blackjack game
 
 ### Topics Covered
 Inheritance
+
 Object-Oriented Programming
+
 JUnit Testing
+
 Building Functionality in Stages
 
 ### Classes
+
 ### Classes - Cards & Decks
+
 #### Suit 
 enum which includes displayText & displayChar
 
@@ -46,10 +51,6 @@ Dealer is set with name as "Dealer"
 boolean in displayHand() method tells whether or not to show full hand
 
 false at beginning, true at end or if Dealer draws a natural blackjack in first deal
-
-[   ♠   ♣   ♥   ♦   ♠   ♣   ♥   ]
-
-[ ♢ J ♢    Jack of Diamonds  ♢ J ♢ ]
 
 #### Player
 Player uses boolean in displayHand() method to choose whether or not to print a split hand or normal hand
