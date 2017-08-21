@@ -370,8 +370,10 @@ public class BlackjackGame {
 		this.deck.shuffleDeck();
 		Hand hand1 = new Hand();
 		Hand hand2 = new Hand();
+		Hand hand3 = new Hand();
 		this.getPlayer().setHand(hand1);
 		this.getDealer().setHand(hand2);
+		this.getPlayer().setSplit(hand3);
 		gameOver = false;
 		playerBust = false;
 		dealerBust = false;
