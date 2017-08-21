@@ -49,6 +49,16 @@ public class HandTests {
 		assertEquals(3, h.getHand().size());
 	}
 	
+	@Test
+	public void test_remove_card_from_hand() {
+		h.addCard(c1);
+		h.addCard(c2);
+		assertEquals(2, h.getHand().size());
+		h.removeCard();
+		//System.out.println(h);
+		assertEquals(1, h.getHand().size());
+	}
+	
 	@Test 
 	public void test_dealers_hand() {
 		h.addCard(c1);

@@ -19,6 +19,10 @@ public abstract class Participant {
 		this.hand.addCard(c);
 	}
 	
+	public void updateHandSplit(Card c) {
+		this.split.addCard(c);
+	}
+	
 	/*
 	 * Getters & Setters
 	 */

@@ -47,10 +47,10 @@ public class UserInput {
 	/*
 	 * Returns a "y" or a "n"
 	 */
-	public String yesOrNo() {
+	public String yesOrNo(String prompt) {
 		String answer = "w";
 		while(! (answer.equals("y") || answer.equals("n"))) {
-			answer = returnUserString("Would you like to play again? (y/n) ");
+			answer = returnUserString(prompt);
 			answer = answer.toLowerCase();
 		}
 		return answer;

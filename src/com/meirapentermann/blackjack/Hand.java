@@ -28,6 +28,20 @@ public class Hand {
 	}
 	
 	/*
+	 * Remove card; only during split
+	 */
+	public Card removeCard() {
+		Card c;
+		if(hand.size() > 0) {
+			c = this.hand.remove(0);
+			return c;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/*
 	 * return handSize
 	 */
 	

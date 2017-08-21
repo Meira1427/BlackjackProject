@@ -9,7 +9,9 @@ public class Player extends Participant {
 	
 	public Player(String name) {
 		Hand hand = new Hand();
+		Hand aSplit = new Hand();
 		this.setHand(hand); //initialize a hand
+		this.setSplit(aSplit);
 		this.setName(name);
 	}
 
@@ -18,16 +20,22 @@ public class Player extends Participant {
 		List<Card> hand = getHand();
 		if(bool) { // a true for player means hand is split
 			List<Card> aSplit = getSplit();
-			System.out.println("* * * * * * * * * * * * * * * * *\t");
+			System.out.print("* * * * * * * * * * * * * * * * *\t");
 			System.out.println("* * * * * * * * * * * * * * * * *\n");
-			System.out.println("\t" + "Split\t\t" + this.getName() + "'s Hand\t\tSplit");
-			for(int i = 0; i < hand.size(); i++) {
-				System.out.print(hand.get(i));
-				System.out.print("\t");
-				System.out.println(aSplit.get(i));
+			System.out.println("\t" + "Split\t\t\t" + this.getName() + "'s Hand\t\tSplit");
+			int count = Math.max(hand.size(), aSplit.size());
+			for(int i = 0; i < count; i++) {
+				if(!(i >=hand.size())) {
+					System.out.print(hand.get(i));
+				}
+				System.out.print("\t\t\t\t\t");
+				if(!(i >=aSplit.size())) {
+					System.out.print(aSplit.get(i));
+				}
+				System.out.println();
 			}
 			System.out.print("Total Value: " + this.handValue());
-			System.out.println("\tTotal Value: " + this.splitHandValue());
+			System.out.println("\t\t\t\tTotal Value: " + this.splitHandValue());
 			System.out.print("\n* * * * * * * * * * * * * * * * *\t");
 			System.out.println("* * * * * * * * * * * * * * * * *\n");
 			
