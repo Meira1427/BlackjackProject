@@ -38,6 +38,10 @@ public abstract class Participant {
 	public List<Card> getHand() { // Note: returning this in List<Card> format, so we can choose
 		return hand.getHand();	  //   to loop through the List of Cards. More versatile
 	}
+	
+	public Hand getHandHand () { // Need this one for the hand only methods
+		return hand;
+	}
 
 	public void setHand(Hand hand) {
 		this.hand = hand;
@@ -53,6 +57,10 @@ public abstract class Participant {
 
 	public List<Card> getSplit() {
 		return split.getHand();
+	}
+	
+	public Hand getSplitHand() {
+		return split;
 	}
 
 	public void setSplit(Hand split) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.meirapentermann.cards.Card;
+import com.meirapentermann.cards.Rank;
 
 public class Hand {
 	private List<Card> hand;
@@ -56,6 +57,55 @@ public class Hand {
 			value += card.getValue();
 		}
 		return value;
+	}
+	
+	/*
+	 * returns number of Aces in given hand
+	 */
+	public int acesInHandCount() {
+		List<Card> cards = this.getHand();
+		int count = 0;
+		for(Card card: cards) {
+			if (card.getRank() == Rank.ACE) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	/*
+	 * Gives position of all Aces in hand
+	 */
+	public List<Integer> acesInHandLocation() {
+		List<Card> cards = this.getHand();
+		if (this.acesInHandCount()==0) {
+			return null;
+		}
+		else {
+			List<Integer> ints = new ArrayList<>();
+			for(int i = 0; i<cards.size(); i++) {
+				if (cards.get(i).getRank()==Rank.ACE) {
+					ints.add(i);
+				}
+			}
+			return ints;
+		}
+	}
+	
+	/*
+	 * Returns true if manages to get hand less than or equal to 21
+	 * return false if it doesn't work
+	 */
+	
+	public void dealWithAces() {
+		if(this.acesInHandCount() > 0) {
+			List<Integer> list = this.acesInHandLocation();
+			int count = list.size();
+			while(( this.handValue() > 21) && count > 0 ) {
+				this.getHand().get(list.get(count-1)).setValue(1);
+				count--;
+			}
+		}
 	}
 	
 	/*

@@ -26,7 +26,7 @@ public class Dealer extends Participant {
 		else { // a false means that first card is not visible
 			System.out.print("[   " + '\u2660' + "   " + '\u2663' + "   "); // prints suits instead
 			System.out.print('\u2665' + "   " + '\u2666' + "   " + '\u2660' + "   "); // more suits
-			System.out.println('\u2663' + "   " + '\u2665' + "   " + "]\n"); // more suits
+			System.out.println('\u2663' + "   " + '\u2665' + "   " + '\u2666' + "   " + "]\n"); // more suits
 			for(int i = 1; i<hand.size(); i++){
 				System.out.println(hand.get(i)); //rest of hand; really only hand.get(1)
 			}

@@ -48,21 +48,27 @@ public class BlackjackGame {
 	 */
 	public void fullGame() {
 		while(playAgain.equals("y")) {
+			int winMain = 0;
+			int winSplit = 0;
 			printSuitBar();
 			initialSetUp();
 			determineNextSteps();
-			if(!this.gameOver) {
+			if(!isGameOver()) {
 				expandPlayerHand();
 			}
-			if(!this.gameOver) {
+			if(!isGameOver()) {
 				expandDealerHand();
-				dealer.displayHand(true);
+				getDealer().displayHand(true);
 			}
 			if(!isSplit()) {
-				calculateWin();
+				String d = "";
+				winMain = calculateWin(getPlayer().getHandHand(), d);
 			}
 			else {
-				calculateWinSplit();
+				String d = " main hand";
+				winMain = calculateWin(getPlayer().getHandHand(), d);
+				d = " split hand";
+				winSplit = calculateWin(getPlayer().getSplitHand(), d);
 			}
 			tearDown();
 			this.playAgain = input.yesOrNo("Would you like to play again? (y/n) ");
@@ -105,7 +111,7 @@ public class BlackjackGame {
 			   && (r1 == Rank.KING || r1 == Rank.QUEEN || r1 == Rank.JACK || r1 == Rank.TEN)){
 				toSplit = input.yesOrNo("Would you like to split? (y/n) ");
 			}
-			else if(r0 == Rank.ACE && r1 == Rank.ACE) {
+			else if(r0 == r1) {
 				toSplit = input.yesOrNo("Would you like to split? (y/n) ");
 			}
 			if (toSplit.equals("y")) {
@@ -113,37 +119,6 @@ public class BlackjackGame {
 				player.getSplit().add(player.getHand().remove(0));
 			}
 		}		
-	}
-	
-	/*
-	 * returns number of Aces in given hand
-	 */
-	public int acesInHandCount(List<Card> cards) {
-		int count = 0;
-		for(Card card: cards) {
-			if (card.getRank() == Rank.ACE) {
-				count++;
-			}
-		}
-		return count;
-	}
-	
-	/*
-	 * Gives position of all Aces in hand
-	 */
-	public List<Integer> acesInHandLocation(List<Card> cards) {
-		if (acesInHandCount(cards)==0) {
-			return null;
-		}
-		else {
-			List<Integer> ints = new ArrayList<>();
-			for(int i = 0; i<cards.size(); i++) {
-				if (cards.get(i).getRank()==Rank.ACE) {
-					ints.add(i);
-				}
-			}
-			return ints;
-		}
 	}
 	
 	public void expandPlayerHand() {
@@ -175,6 +150,16 @@ public class BlackjackGame {
 					answer = input.hitOrStay();
 				}
 			}
+			if( (player.handValue() > 21 && player.getHandHand().acesInHandCount() > 0) ) { //try to fix Ace situation
+				player.getHandHand().dealWithAces();
+				System.out.println("Hand with Aces Adjusted");
+				player.displayHand(isSplit()); //show updated hand - if isSplit use split format printing
+			}
+			if (isSplit() && player.splitHandValue() > 21 && player.getSplitHand().acesInHandCount() > 0) { //if Aces need to be switched
+				player.getSplitHand().dealWithAces();
+				System.out.println("Hand with Aces Adjusted");
+				player.displayHand(isSplit()); //show updated hand - if isSplit use split format printing
+			}
 			if(player.handValue()==21) {
 				answer = "s";
 			}
@@ -184,28 +169,24 @@ public class BlackjackGame {
 			if(answer.equals("s") && splitAnswer.equals("s")) {
 				break;
 			}	
-			if( (player.handValue() > 21 && acesInHandCount(player.getHand()) > 0) //try to fix Ace situation
-				|| (isSplit() && player.splitHandValue() > 21 && acesInHandCount(player.getSplit()) > 0)) { //if Aces need to be switched
-				if (player.handValue() > 21 && acesInHandCount(player.getHand()) > 0) { //main hand branch
-					dealWithAcesMainHand();
-				}
-				if (isSplit() && player.splitHandValue() > 21 && acesInHandCount(player.getSplit()) > 0) {
-					dealWithAcesSplitHand();
+			if(isSplit() && player.splitHandValue() > 21) { // over 21 split hand
+				//System.out.println("Setting splitBust to true");
+				splitAnswer = "bust";
+				this.splitBust = true;
+			}
+			if(player.handValue() > 21) { // over 21 main hand
+				//System.out.println("Setting playerBust to true");
+				answer = "bust";
+				this.playerBust = true;
+				if(!isSplit()) {
+					this.gameOver = true;
 				}
 			}
-			if(player.handValue() > 21 || (isSplit() && player.splitHandValue() > 21)) { //if still over 21
-				if(player.handValue() > 21) { // over 21 main hand
-					answer = "bust";
-					this.gameOver = true;
-					this.playerBust = true;
-				}
-				if(isSplit() && player.splitHandValue() > 21) { // over 21 split hand
-					splitAnswer = "bust";
-					this.splitBust = true;
-				}
+			if(isPlayerBust() && isSplitBust()) {
+				this.gameOver = true;
 			}
 		} //end while loop 
-	}
+	} // end explandPlayerHand
 	
 	public void expandDealerHand() {
 		int total = dealer.handValue();
@@ -213,13 +194,9 @@ public class BlackjackGame {
 			dealer.updateHand(deck.dealCard());
 			total = dealer.handValue();
 		}
-		if( (dealer.handValue()> 21) && (acesInHandCount(dealer.getHand()) > 0)) {
-			List<Integer> list = acesInHandLocation(dealer.getHand());
-			int count = list.size();
-			while(( dealer.handValue() > 21) && count > 0 ) {
-				dealer.getHand().get(list.get(count-1)).setValue(1);
-				count--;
-			}
+		if( (dealer.handValue()> 21) && (dealer.getHandHand().acesInHandCount() > 0)) {
+			List<Integer> list = dealer.getHandHand().acesInHandLocation();
+			dealer.getHandHand().dealWithAces();
 		}
 		if(dealer.handValue() < 17) {
 			expandDealerHand();       //recursive call back to itself, until dealer hand over 17
@@ -229,139 +206,52 @@ public class BlackjackGame {
 		}
 	}
 	
-	public void dealWithAcesMainHand() {
-		if(acesInHandCount(player.getHand()) > 0) {
-			List<Integer> list = acesInHandLocation(player.getHand());
-			int count = list.size();
-			while(( player.handValue() > 21) && count > 0 ) {
-				player.getHand().get(list.get(count-1)).setValue(1);
-				count--;
-			}
-			System.out.println("Hand with Aces Adjusted");
-			player.displayHand(split);
-			if(player.handValue()<21) {
-				answer = input.hitOrStay();
-			}
-			else {
-				answer = "bust";
-				this.playerBust = true;
-			}
-		}
-	}
-	
-	public void dealWithAcesSplitHand() {
-		if(acesInHandCount(player.getSplit()) > 0) {
-			List<Integer> list = acesInHandLocation(player.getSplit());
-			int count = list.size();
-			while(( player.splitHandValue() > 21) && count > 0 ) {
-				player.getSplit().get(list.get(count-1)).setValue(1);
-				count--;
-			}
-			System.out.println("Hand with Aces Adjusted");
-			player.displayHand(split);
-			if(player.splitHandValue()<21) {
-				System.out.print("For 2nd Hand: ");
-				splitAnswer = input.hitOrStay();
-			}
-			else {
-				answer = "bust";
-				this.splitBust = true;
-			}
-		}
-	}
-	
 	/*
 	 * Starts with most unlikely case of a natural BlackJack for both dealer & player
 	 * Moves on in order of elimination of conditions of cards
 	 */
-	public void calculateWin() {
-		if(player.handValue() == 21 && player.getHand().size()==2 
-		 & dealer.handValue() == 21 & dealer.getHand().size()==2) {
-			System.out.println("Natural BlackJack! Both Player & Dealer. It's a Tie!");
+	public int calculateWin(Hand H, String description) {
+		//System.out.println("playerBust " + isPlayerBust() + ". and splitBust " + isSplitBust());
+		if( (H.handValue() == 21 && H.getHand().size()==2) 
+		 && (dealer.handValue() == 21 && dealer.getHand().size()==2)) {
+			System.out.println("Natural BlackJack! Both Player" + description + " & Dealer. It's a Tie!");
+			return 0;
 		}
-		else if (player.handValue() == 21 && player.getHand().size()==2) {
-			System.out.println("Natural BlackJack! Player wins!");
-		}
-		else if (dealer.handValue() == 21 && dealer.getHand().size()==2) {
-			System.out.println("Natural BlackJack! Dealer wins!");
-		}
-		else if (player.handValue() == 21 && dealer.handValue() == 21) {
-			System.out.println("BlackJack! Both Player & Dealer. It's a Tie!");
-		}
-		else if(this.playerBust && this.dealerBust) {
-			System.out.println("Both Player and Dealer bust!");
-			//I think this is unreachable code. Dealer will not deal if player busts
-		}
-		else if (this.playerBust) {
-			System.out.println("Player busted. Dealer wins!");
-		}
-		else if (this.dealerBust) {
-			System.out.println("Dealer busted. Player wins!");
-		}
-		else if (player.handValue() == dealer.handValue()) {
-			System.out.println("It's a Tie!");
-		}
-		else if (player.handValue() > dealer.handValue()) {
-			System.out.println("Player wins!");
-		}
-		else {
-			System.out.println("Dealer wins.");
-		}
-	}
-	
-	/*
-	 * Gets convoluted if there is a split. Wanted to walk through different method
-	 * even if similar to other method. Will save from asking isSplit()? every lien
-	 */
-	public void calculateWinSplit() {
-		if ( (playerBust && !splitBust) || (splitBust && !playerBust) ) {
-			System.out.println("Player bust one hand.");
-		}
-		if(((player.handValue() == 21 && player.getHand().size()==2) 
-				|| (player.splitHandValue() == 21 && player.getSplit().size()==2))
-				&& (dealer.handValue() == 21 & dealer.getHand().size()==2) ) {
-			System.out.println("Natural BlackJack! Both Player & Dealer. It's a Tie!");
-		}
-		else if ((player.handValue() == 21 && player.getHand().size()==2) 
-				|| (player.splitHandValue() == 21 && player.getSplit().size()==2)){
-			System.out.println("Natural BlackJack! Player wins!");
+		else if (H.handValue() == 21 && H.getHand().size()==2){
+			System.out.println("Natural BlackJack" + description + "! Player wins!");
+			return 1;
 		}
 		else if (dealer.handValue() == 21 && dealer.getHand().size()==2) {
-			System.out.println("Natural BlackJack! Dealer wins!");
+			System.out.println("Natural BlackJack! Dealer wins" + description + "!");
+			return -1;
 		}
-		else if ((player.handValue() == 21 || player.splitHandValue()== 21) && dealer.handValue() == 21) {
-			System.out.println("BlackJack! Both Player & Dealer. It's a Tie!");
+		else if (H.handValue() == 21 && dealer.handValue() == 21) {
+			System.out.println("BlackJack! Both Player" + description + " & Dealer. It's a Tie!");
+			return 0;
 		}
-		else if (this.playerBust && this.splitBust) {
-			System.out.println("Player busted both hands. Dealer wins!");
+		else if (isPlayerBust() && H==getPlayer().getHandHand()) {
+			System.out.println("Player busted" + description + ". Dealer wins!");
+			return -1;
 		}
-		else if (this.dealerBust) {
-			if(!playerBust && !splitBust) {
-				System.out.println("Dealer busted. Player wins two hands!");
-			}
-			else if(playerBust || splitBust) {
-				System.out.println("Dealer busted. Player wins one hand!");
-			}
-			else {
-				System.out.println("Everyone busted.");
-			}
+		else if (isSplit() && isSplitBust() && H==getPlayer().getSplitHand()) {
+			System.out.println("Player busted" + description + ". Dealer wins!");
+			return -1;
 		}
-		else if ( ( (player.handValue() > dealer.handValue()) && !playerBust)
-				|| ((player.splitHandValue() > dealer.handValue()) && !splitBust))  {
-			
-			if ((player.handValue() > dealer.handValue()) && (player.splitHandValue() > dealer.handValue()) 
-					&& !playerBust && !splitBust) {
-				System.out.println("Player wins two hands!");
-			}
-			else {
-				System.out.println("Player wins one hand!");
-			}
+		else if (isDealerBust()) {
+			System.out.println("Dealer busted. Player wins" + description + "!");
+			return 1;
 		}
-		else if ((player.handValue() == dealer.handValue()) || (player.splitHandValue() == dealer.handValue())) {
-			System.out.println("It's a Tie!");
+		else if (H.handValue() == dealer.handValue()) {
+			System.out.println("It's a Tie" + description + "!");
+			return 0;
+		}
+		else if (H.handValue() > dealer.handValue()) {
+			System.out.println("Player wins" + description + "!");
+			return 1;
 		}
 		else {
-			System.out.println("Dealer wins.");
+			System.out.println("Dealer wins" + description + ".");
+			return -1;
 		}
 	}
 		
@@ -377,6 +267,7 @@ public class BlackjackGame {
 		gameOver = false;
 		playerBust = false;
 		dealerBust = false;
+		splitBust = false;
 		split = false;
 		answer = "h";	
 		splitAnswer = "x";
@@ -448,6 +339,14 @@ public class BlackjackGame {
 
 	public void setPlayerBust(boolean playerBust) {
 		this.playerBust = playerBust;
+	}
+	
+	public boolean isSplitBust() {
+		return splitBust;
+	}
+
+	public void setSplitBust(boolean splitBust) {
+		this.splitBust = splitBust;
 	}
 
 	public boolean isDealerBust() {

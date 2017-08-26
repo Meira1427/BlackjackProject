@@ -40,8 +40,8 @@ public class Card {
 
 	/*
 	 * Format produces cards like this:
-	 * [ ♡ 10 ♡    Ten of Hearts  ♡ 10 ♡ ]
-	 * [ ♧ K ♧    King of Clubs  ♧ K ♧ ]
+	 * [ ♡ 10 ♡  Ten of Hearts  ♡ 10 ♡ ]
+	 * [ ♧ K ♧  King of Clubs  ♧ K ♧ ]
 	 */
 	@Override
 	public String toString() {
@@ -52,7 +52,7 @@ public class Card {
 		sb.append(rank.displayShort);
 		sb.append(" ");
 		sb.append(suit.displayChar);
-		sb.append("    ");
+		sb.append("  ");
 		sb.append(rank.displayText);
 		sb.append(suit.displayText);
 		sb.append("  ");
