@@ -47,11 +47,11 @@ public class Hand {
 	 */
 	
 	public int handSize() {
-		return getHand().size();
+		return getHandList().size();
 	}
 	
 	public int handValue() {
-		List<Card> cards = this.getHand();
+		List<Card> cards = this.getHandList();
 		int value = 0;
 		for(Card card : cards) {
 			value += card.getValue();
@@ -63,7 +63,7 @@ public class Hand {
 	 * returns number of Aces in given hand
 	 */
 	public int acesInHandCount() {
-		List<Card> cards = this.getHand();
+		List<Card> cards = this.getHandList();
 		int count = 0;
 		for(Card card: cards) {
 			if (card.getRank() == Rank.ACE) {
@@ -77,7 +77,7 @@ public class Hand {
 	 * Gives position of all Aces in hand
 	 */
 	public List<Integer> acesInHandLocation() {
-		List<Card> cards = this.getHand();
+		List<Card> cards = this.getHandList();
 		if (this.acesInHandCount()==0) {
 			return null;
 		}
@@ -102,7 +102,7 @@ public class Hand {
 			List<Integer> list = this.acesInHandLocation();
 			int count = list.size();
 			while(( this.handValue() > 21) && count > 0 ) {
-				this.getHand().get(list.get(count-1)).setValue(1);
+				this.getHandList().get(list.get(count-1)).setValue(1);
 				count--;
 			}
 		}
@@ -111,7 +111,7 @@ public class Hand {
 	/*
 	 * Getters & Setters
 	 */
-	public List<Card> getHand() {
+	public List<Card> getHandList() {
 		return hand;
 	}
 
@@ -126,7 +126,7 @@ public class Hand {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("");
-		List<Card> cards = this.getHand();
+		List<Card> cards = this.getHandList();
 		for(Card card : cards) {
 			sb.append(card);
 			sb.append("\n");

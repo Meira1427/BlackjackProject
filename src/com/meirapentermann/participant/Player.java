@@ -28,9 +28,9 @@ public class Player extends Participant {
 
 	@Override
 	public void displayHand(boolean bool) {
-		List<Card> hand = getHand();
+		List<Card> hand = getHandList();
 		if(bool) { // a true for player means hand is split
-			List<Card> aSplit = getSplit();
+			List<Card> aSplit = getSplitList();
 			System.out.print("* * * * * * * * * * * * * * * * *\t");
 			System.out.println("* * * * * * * * * * * * * * * * *\n");
 			System.out.println("\t" + "Split\t\t\t" + this.getName() + "'s Hand\t\tSplit");

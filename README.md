@@ -32,18 +32,29 @@ basic Getters & Setters and toString()
 #### Deck
 deck can be initialized with blackjack values or an array of integers can be passed with different values
 
+createDeck() or createDeck(int[] values) is used by constructors to create blackjack deck or alternate deck
+
 shuffleDeck() shuffles the Collection
 
 dealCard() returns a Card while removing it from deck
 
 cardSLeft() returns an integer; number of cards left in deck
 
+basic Getters & Setters and toString()
+
 ### Classes - Participants
 #### Participant
 Abstract Class which forces each subclass to define a displayHand() method that takes a boolean
-boolean used differently depending upon subclass
 
-updateHand() and getHandValue() most useful methods defined here
+Fields: String name, Hand hand, Hand split
+
+updateHand() and updateHandSplit() add a card to either main hand or split hand
+
+getHandList() and getSplitList() return a List<Card>
+
+getHandHand() and getSplitHand() return a Hand
+
+handValue() and splitHandValue() return an int, the value of the cards 
 
 #### Dealer
 Dealer is set with name as "Dealer"
@@ -55,7 +66,14 @@ false at beginning, true at end or if Dealer draws a natural blackjack in first 
 #### Player
 Player uses boolean in displayHand() method to choose whether or not to print a split hand or normal hand
 
+player has hand and aSplit Hand initialized 
+
+wallet is feature in progress, not developed yet
+
 ### Classes - BlackJack
+#### BetManager
+this is feature in progress, not developed yet
+
 #### UserInput
 this class handles getting proper answer from user in the form of (h)it or (s)tay or (y)es or (n)o
 
@@ -66,7 +84,13 @@ addCard(Card c) very flexible, adds a card to a hand
 
 removeCard() used only in the case of moving a card to a split hand; removed card at index 0
 
-getHand() returns a List<Card> rather than a Hand object. This was more useful throughout program
+getHandList() returns a List<Card> rather than a Hand object. This was useful throughout program
+
+acesInHandCount() - counts and returns number of Aces in Hand
+
+acesInHandLocation() - returns a List<Integer>, the indexes where you can find Aces
+
+dealWithAcesMainHand() handles Aces if necessary
 
 also includes handSize() and handValue()
 
@@ -93,17 +117,11 @@ determineNextSteps() - looks for cases of natural blackjacks & possibility of sp
 
 expandPlayerHand() - most complicated, loops through hit/stay process, handles split hand, busting process
 
-acesInHandCount(List<Card> cards) - counts and returns number of Aces in List<Card> passed to it
-
-acesInHandLocation(List<Card> cards) - returns a List<Integer>, the indexes where you can find Aces
-
-dealWithAcesMainHand() & dealWithAcesSplitHand() - handles Aces if necessary in Main Hand or Split Hand
-
 expandDealerHand() - loops while dealer has less than 17; deals with Aces if necessary
 
-calculateWin() & calculateWinSplit() - deals with printing message to user, explaining the win
+calculateWin() - deals with printing message to user, explaining the win
 
-tearDown() - resets and reshuffles deck, clears out hands, resets booleans and strings
+tearDown() - resets and re-shuffles deck, clears out hands, resets booleans and strings
 
 printSuitBar() - to print ♥   ♠   ♣   ♦   ♥   ♠   ♣   ♦   ♥   ♠   ♣   ♦   ♥   ♠   ♣   ♦   ♥   ♠   ♣   ♦ 
 

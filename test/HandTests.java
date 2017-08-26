@@ -43,20 +43,20 @@ public class HandTests {
 	public void test_adding_cards_to_hand() {
 		h.addCard(c1);
 		h.addCard(c2);
-		assertEquals(2, h.getHand().size());
+		assertEquals(2, h.getHandList().size());
 		h.addCard(c3);
 		//System.out.println(h);
-		assertEquals(3, h.getHand().size());
+		assertEquals(3, h.getHandList().size());
 	}
 	
 	@Test
 	public void test_remove_card_from_hand() {
 		h.addCard(c1);
 		h.addCard(c2);
-		assertEquals(2, h.getHand().size());
+		assertEquals(2, h.getHandList().size());
 		h.removeCard();
 		//System.out.println(h);
-		assertEquals(1, h.getHand().size());
+		assertEquals(1, h.getHandList().size());
 	}
 	
 	@Test 
@@ -66,7 +66,7 @@ public class HandTests {
 		dealer.setHand(h);
 		dealer.displayHand(false);
 		dealer.displayHand(true);
-		assertEquals(2, dealer.getHand().size());
+		assertEquals(2, dealer.getHandList().size());
 	}
 	
 	@Test 
@@ -75,7 +75,7 @@ public class HandTests {
 		h.addCard(c2);
 		player1.setHand(h);
 		player1.displayHand(false);
-		assertEquals(2, player1.getHand().size());
+		assertEquals(2, player1.getHandList().size());
 	}
 
 }

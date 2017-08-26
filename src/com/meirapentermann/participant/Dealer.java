@@ -15,7 +15,7 @@ public class Dealer extends Participant {
 
 	@Override
 	public void displayHand(boolean bool) {
-		List<Card> hand = getHand();
+		List<Card> hand = getHandList();
 		System.out.println("* * * * * * * * * * * * * * * * *\n");
 		System.out.println("\t" + this.getName() + "'s Hand\n");
 		if(bool) { // a true for dealer shows entire hand

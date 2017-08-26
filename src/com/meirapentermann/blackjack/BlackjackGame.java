@@ -104,8 +104,8 @@ public class BlackjackGame {
 			gameOver = true;
 		}
 		if(!(dealer.handValue()==21)) {
-			Rank r0 = player.getHand().get(0).getRank();
-			Rank r1 = player.getHand().get(1).getRank();
+			Rank r0 = player.getHandList().get(0).getRank();
+			Rank r1 = player.getHandList().get(1).getRank();
 			String toSplit = "";
 			if(   (r0 == Rank.KING || r0 == Rank.QUEEN || r0 == Rank.JACK || r0 == Rank.TEN) 
 			   && (r1 == Rank.KING || r1 == Rank.QUEEN || r1 == Rank.JACK || r1 == Rank.TEN)){
@@ -116,7 +116,7 @@ public class BlackjackGame {
 			}
 			if (toSplit.equals("y")) {
 				this.split = true;
-				player.getSplit().add(player.getHand().remove(0));
+				player.getSplitList().add(player.getHandList().remove(0));
 			}
 		}		
 	}
@@ -195,7 +195,7 @@ public class BlackjackGame {
 			total = dealer.handValue();
 		}
 		if( (dealer.handValue()> 21) && (dealer.getHandHand().acesInHandCount() > 0)) {
-			List<Integer> list = dealer.getHandHand().acesInHandLocation();
+			//List<Integer> list = dealer.getHandHand().acesInHandLocation();
 			dealer.getHandHand().dealWithAces();
 		}
 		if(dealer.handValue() < 17) {
@@ -211,17 +211,16 @@ public class BlackjackGame {
 	 * Moves on in order of elimination of conditions of cards
 	 */
 	public int calculateWin(Hand H, String description) {
-		//System.out.println("playerBust " + isPlayerBust() + ". and splitBust " + isSplitBust());
-		if( (H.handValue() == 21 && H.getHand().size()==2) 
-		 && (dealer.handValue() == 21 && dealer.getHand().size()==2)) {
+		if( (H.handValue() == 21 && H.getHandList().size()==2) 
+		 && (dealer.handValue() == 21 && dealer.getHandList().size()==2)) {
 			System.out.println("Natural BlackJack! Both Player" + description + " & Dealer. It's a Tie!");
 			return 0;
 		}
-		else if (H.handValue() == 21 && H.getHand().size()==2){
+		else if (H.handValue() == 21 && H.getHandList().size()==2){
 			System.out.println("Natural BlackJack" + description + "! Player wins!");
 			return 1;
 		}
-		else if (dealer.handValue() == 21 && dealer.getHand().size()==2) {
+		else if (dealer.handValue() == 21 && dealer.getHandList().size()==2) {
 			System.out.println("Natural BlackJack! Dealer wins" + description + "!");
 			return -1;
 		}
